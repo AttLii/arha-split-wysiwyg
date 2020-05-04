@@ -1,6 +1,6 @@
 {
   "name": "arha-split-wysiwyg",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "noop",
   "main": "index.js",
   "scripts": {},
