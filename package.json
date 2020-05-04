@@ -7,8 +7,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "node-html-parser": "^1.2.16"
+  },
   "peerDependencies": {
-    "node-html-parser": "^1.2.16",
     "prop-types": "^15.7.2",
     "react": "^16.13.1"
   }
