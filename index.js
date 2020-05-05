@@ -1,5 +1,5 @@
 const PropTypes = require("prop-types")
-const { createElement } = require("react")
+const { createElement, forwardRef } = require("react")
 const { parse } = require("node-html-parser")
 
 const spaceSpan =
@@ -57,7 +57,7 @@ const reduceHTML = string => {
   }, "")
 }
 
-const SplitWysiwyg = props => {
+const SplitWysiwyg = forwardRef((props, ref) => {
   const { className, children } = props
 
   return createElement(
@@ -66,11 +66,12 @@ const SplitWysiwyg = props => {
       className,
       dangerouslySetInnerHTML: {
         __html: reduceHTML(children)
-      }
+      },
+      ref
     },
     null
   )
-}
+})
 
 SplitWysiwyg.defaultProps = {
   className: "",
