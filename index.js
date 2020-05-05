@@ -2,7 +2,20 @@ const PropTypes = require("prop-types")
 const { createElement } = require("react")
 const { parse } = require("node-html-parser")
 
-const spaceSpan = `<span class="space">&nbsp;</span>`
+const spaceSpan =
+  '<span class="space" style="display:inline-block">&nbsp;</span>'
+
+const reduceChars = (chars, char) => {
+  return chars + `<span class="char">${char}</span>`
+}
+
+const reduceWords = (words, word) => {
+  const charSpans = word.split("").reduce(reduceChars, "")
+  return (
+    words +
+    `<span class="word" style="display:inline-flex">${charSpans}${spaceSpan}</span>`
+  )
+}
 
 const reduceHTML = string => {
   // parse html string with a library
@@ -19,6 +32,7 @@ const reduceHTML = string => {
       const { innerHTML, rawAttrs } = curr
 
       const startTag = `<${tagName} ${rawAttrs}>`
+      const endTag = `</${tagName}>`
       let inner = ""
       // script tags are skipped over
       if (tagName === "script") {
@@ -27,30 +41,17 @@ const reduceHTML = string => {
         inner = reduceHTML(innerHTML)
       }
 
-      const endTag = `</${tagName}>`
-
       return acc + startTag + inner + endTag
     } else {
       // else going through element that only has textcontent (rawText)
       const { rawText } = curr
 
       if (rawText === "&nbsp;") {
-        // if space, print space span
         return acc + spaceSpan
       } else if (rawText === "\n") {
-        // if linebreak, print line break
         return acc + rawText
       } else {
-        // else we start to iterate textContent
-        return rawText.split("").reduce((chars, char) => {
-          if (char === " ") {
-            // if space, print space span
-            return chars + spaceSpan
-          } else {
-            // else wrap char around char span
-            return chars + `<span class="char">${char}</span>`
-          }
-        }, "")
+        return acc + rawText.split(" ").reduce(reduceWords, "")
       }
     }
   }, "")
